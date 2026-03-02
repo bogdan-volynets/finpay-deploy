@@ -11,3 +11,7 @@ variable "Project.Cluster.Namespace" {
         environment = ["production"]
     }
 }
+
+variable "Project.Cluster.Test" {
+    value "test" {}
+}
