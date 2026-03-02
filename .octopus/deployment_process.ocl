@@ -1,0 +1,36 @@
+step "deploy-a-fraud-detector-helm-chart" {
+    name = "Deploy a fraud-detector Helm Chart"
+    properties = {
+        Octopus.Action.TargetRoles = "payments-k8s"
+    }
+
+    action {
+        action_type = "Octopus.HelmChartUpgrade"
+        properties = {
+            Octopus.Action.GitRepository.Source = "External"
+            Octopus.Action.Helm.ChartDirectory = "charts/fraud-detector/"
+            Octopus.Action.Helm.Namespace = "#{Project.Cluster.Namespace}"
+            Octopus.Action.Helm.ReleaseName = "fraud-detector"
+            Octopus.Action.Helm.ResetValues = "True"
+            Octopus.Action.Helm.TemplateValuesSources = <<-EOT
+                [
+                  {
+                    "Type": "Chart",
+                    "ValuesFilePaths": "charts/fraud-detector/values.yaml\ncharts/fraud-detector/values-#{Octopus.Environment.Name | ToLower}.yaml"
+                  }
+                ]
+                EOT
+            Octopus.Action.Kubernetes.ResourceStatusCheck = "True"
+            Octopus.Action.Script.ScriptSource = "GitRepository"
+        }
+        worker_pool = "hosted-windows"
+        worker_pool_variable = ""
+
+        git_dependencies {
+            default_branch = "main"
+            git_credential_id = "GitCredentials-23"
+            git_credential_type = "Library"
+            repository_uri = "https://github.com/bogdan-volynets/finpay-deploy.git"
+        }
+    }
+}

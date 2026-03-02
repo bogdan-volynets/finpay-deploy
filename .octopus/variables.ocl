@@ -1,0 +1,13 @@
+variable "Project.Cluster.Namespace" {
+    value "fraud-dev" {
+        environment = ["development"]
+    }
+
+    value "fraud-staging" {
+        environment = ["staging"]
+    }
+
+    value "fraud-prod" {
+        environment = ["production"]
+    }
+}
