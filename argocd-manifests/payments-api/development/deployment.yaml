@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: payments-api
-          image: bogdanoctopus/finpay-payments-api:3.2.0
+          image: bogdanoctopus/finpay-payments-api:3.3.0
           ports:
             - containerPort: 80
           env:
